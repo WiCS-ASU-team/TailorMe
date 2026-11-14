@@ -57,6 +57,10 @@ input,select{background:var(--card);border:1.5px solid var(--line);color:var(--i
 .card-actions{display:flex;gap:8px}.card-actions button{flex:1}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}.card-grid .tailor-card{flex:none}.card-grid .tailor-top h3{font-size:20px}
 .page-head{margin-bottom:28px;max-width:760px}.page-head h1{font-size:clamp(36px,5vw,54px)}.lead{font-size:18px}
+/* Center only the introduction on the three Our Services pages */
+#p-service .page-head{max-width:900px;margin:0 auto 28px;text-align:center}
+#p-service .page-head .lead{max-width:900px;margin-left:auto;margin-right:auto}
+
 .info{background:var(--card);border-radius:14px;outline:1.5px dashed var(--line);outline-offset:-7px;box-shadow:0 8px 22px var(--shadow);padding:34px 36px;margin-bottom:26px}.info h2{font-size:30px;margin-bottom:10px}.info ul,.info ol{line-height:1.8;padding-left:22px;margin:10px 0}
 .price-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0}.price-row div{background:var(--tan);border-radius:12px;padding:16px;text-align:center}.price-row strong{display:block;font-size:22px;color:var(--accent);font-family:'Playfair Display',serif}
 .guide-list{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;margin:14px 0 20px}.guide-list p{margin:0}
@@ -160,7 +164,7 @@ dialog{border:1.5px dashed var(--line);border-radius:22px;background:var(--card)
 <dialog id="measure-dialog" aria-labelledby="measure-title"><button class="close" aria-label="Close measurements" onclick="this.closest('dialog').close()">×</button><span class="script">a fit that’s all yours</span><h2 id="measure-title">Your measurements</h2><p class="muted">Use a soft measuring tape. Keep it snug, without pulling tight, and measure over light clothing.</p><p class="notice">Saved only in this browser. Use sample measurements for this demo; there is no account or secure server storage.</p><form id="measure-form"><label>Measurement unit <select name="unit" id="unit"><option value="in">Inches</option><option value="cm">Centimeters</option></select></label><div class="fields" id="measure-fields"></div><button type="submit">Save my measurements ♡</button> <button type="button" class="outline" id="clear-measurements">Clear saved values</button></form></dialog>
 <div id="toast" role="status"></div>
 <script>
-// Standalone frontend prototype. No backend, authentication, or real messaging.
+
 const $=s=>document.querySelector(s);
 const tailors = [
   {name: "Maison Odette",initials: "MO",level: "Made from Scratch",services:["custom-fit","custom-design"],rating: 4.9,reviews: 38,price: 65,address: "Mill Avenue, Tempe, AZ",specialties: ["Bridal", "Formal wear", "Custom dresses"],bio: "Romantic silhouettes, delicate trims, and a soft spot for ribbon. Maison Odette creates custom pieces for special occasions.",
@@ -203,7 +207,7 @@ const tailors = [
     ]
   }
 ];
-// Each service page shows up to four tailors whose "services" list includes it.
+
 const services={
  alterations:{title:'Alterations',desc:'Give the clothes you already own a longer life and a better fit. TailorMe connects you with local tailors who handle hems, zippers, buttons, and repairs, plus taking in and letting out, so your favorite pieces feel like new.'},
  'custom-fit':{title:'Custom Fit',desc:'Precision tailoring that makes off-the-rack pieces fit like they were made for you. Share your measurements once, and our tailors will resize, reshape, and perfect each garment around your body.'},
@@ -216,7 +220,6 @@ if(!conversations||Array.isArray(conversations)||typeof conversations!=='object'
 function save(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch{toast('Browser storage is unavailable. Changes last for this session.');return false}}
 function toast(text){$('#toast').textContent=text;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').textContent='',3500)}
 
-// Mannequin for the hero.
 function man(shape,color,h,hat){const b='#26201E',l='#3D3532';let s=`<svg viewBox="0 -8 120 388" style="height:${h}px;width:auto" aria-hidden="true"><g fill="${b}" stroke="${l}" stroke-width="1.2"><path d="M40 166Q44 220 48 262L46 330L44 362Q44 368 50 368L56 366L58 300L60 240L60 176Z"/><path d="M80 166Q76 220 74 262L76 330L80 362Q80 368 74 368L68 366L64 300L60 240L60 176Z"/><path d="M36 60Q28 62 27 76L24 120L22 160Q22 168 26 168Q31 168 31 160L34 120L38 84Z"/><path d="M84 60Q92 62 93 76L96 120L98 160Q98 168 94 168Q89 168 89 160L86 120L82 84Z"/><path d="M36 60Q48 52 60 54Q72 52 84 60L83 82Q80 98 73 110Q69 118 70 128Q80 146 81 168L60 176L39 168Q40 146 50 128Q51 118 47 110Q40 98 37 82Z"/><path d="M55 40h10v14H55z"/><ellipse cx="60" cy="26" rx="11" ry="16"/></g>`;
 if(shape)s+=`<path d="M42 60Q60 68 78 60L82 84Q76 102 73 112Q92 130 98 236Q60 246 22 236Q28 130 47 112Q44 102 38 84Z" fill="${color}" stroke="#00000040"/>`;
 if(hat)s+='<ellipse cx="60" cy="14" rx="40" ry="8" fill="#1C1816"/><path d="M47 14Q47 -4 60 -4Q73 -4 73 14Z" fill="#1C1816"/>';
@@ -225,7 +228,6 @@ const THREAD='<svg viewBox="0 0 340 700"><path d="M118 8C96 40 92 60 100 110C112
 document.querySelectorAll('.thread').forEach(e=>e.innerHTML=THREAD);
 $('#man-l').innerHTML=man(null,null,380);$('#man-r').innerHTML=man(1,'#7A1F2B',410,true);
 
-// Placeholder before/after pictures for "Pick Your Kind of Help". Swap for real photos any time.
 const badge=(x,t)=>`<rect x="${x}" y="8" width="58" height="18" rx="9" fill="#7A1F2B"/><text x="${x+29}" y="21" text-anchor="middle" font-size="9" fill="#fff" font-family="Lora,serif">${t}</text>`;
 function ph(kind){const bg='<rect width="150" height="180" fill="#D9CFBE"/><rect x="150" width="150" height="180" fill="#E6DCCB"/>';let a='',l='BEFORE',r='AFTER';
 if(kind==='hem')a='<path d="M50 0H110V150L104 160L98 150L92 162L86 150L80 164L74 150L68 160L62 150L56 162L50 152Z" fill="#6F8FB3"/><circle cx="104" cy="120" r="4" fill="#C0394B"/><path d="M200 0H260V140H200Z" fill="#6F8FB3"/><path d="M200 126H260" stroke="#F3E6D0" stroke-width="2" stroke-dasharray="5 4"/>';
@@ -242,7 +244,6 @@ $('#help-grid').innerHTML=help.map(h=>`<a class="help-card" href="#tailors" data
 // Picking a card selects that service in the Tailors section and scrolls down to it.
 function chooseHelp(level){filterTailors(level);$('#tailors').scrollIntoView({behavior:'smooth'})}
 
-// Existing tailor card, reused on every page. "Contact tailor" opens messages; "View profile" opens the profile.
 function tailorCard(t){return `<article class="card tailor-card"><div class="tailor-top"><div class="avatar">${t.initials}</div><div><h3>${t.name}</h3><span class="level-badge">${t.level}</span></div></div><p class="rating">★ <strong>${t.rating}</strong> <span class="muted">(${t.reviews} reviews)</span></p><p class="muted">${t.address}</p><div class="tags">${t.specialties.map(s=>`<span class="tag">${s}</span>`).join("")}</div><p>Starting at <strong>$${t.price}</strong></p><div class="sample-work">${t.images.map(img=>`<img src="${img}" alt="Sample work by ${t.name}" loading="lazy">`).join("")}</div><div class="card-actions"><button class="tiny" data-contact="${t.i}">Contact tailor</button><button class="outline tiny" data-tailor="${t.i}">View profile</button></div></article>`}
 const withIndex=()=>tailors.map((t,i)=>({...t,i}));
 let activeLevel="All";
@@ -259,11 +260,9 @@ let list=withIndex();if(mode==='specialty'&&browseSpec!=='All')list=list.filter(
 if(mode==='top')list.sort((a,b)=>b.rating-a.rating||b.reviews-a.reviews);
 $('#br-grid').innerHTML=list.map(tailorCard).join('')||'<p class="empty">No tailors found.</p>'}
 
-// How It Works content that is built from data.
 $('#guide-list').innerHTML=fields.map(([k,l,tip])=>`<p><strong>${l}.</strong> <span class="muted">${tip}</span></p>`).join('');
 $('#price-row').innerHTML=help.map(h=>`<div><strong>From $${levelMin(h.level)}</strong>${h.level}</div>`).join('');
 
-// Simple page router: each "page" is a section toggled by the URL hash.
 const ROUTES={home:{page:'home'},help:{page:'home',scroll:'help'},tailors:{page:'home',scroll:'tailors'},
  alterations:{page:'service',key:'alterations'},'custom-fit':{page:'service',key:'custom-fit'},'custom-design':{page:'service',key:'custom-design'},
  'browse-tailors':{page:'browse',mode:'all'},specialty:{page:'browse',mode:'specialty'},'top-rated':{page:'browse',mode:'top'},
@@ -275,7 +274,6 @@ if(r.page==='service')renderService(r.key);if(r.page==='browse')renderBrowse(r.m
 if(r.scroll)$('#'+r.scroll).scrollIntoView();else window.scrollTo(0,0)}
 window.addEventListener('hashchange',route);
 
-// Navigation dropdowns: open on hover or click, close on outside click or Escape.
 const dds=[...document.querySelectorAll('.dd')];
 function closeDD(except){dds.forEach(d=>{if(d!==except){d.classList.remove('open');d.querySelector('.dd-btn').setAttribute('aria-expanded','false')}})}
 dds.forEach(d=>{const b=d.querySelector('.dd-btn');b.addEventListener('click',e=>{e.stopPropagation();const open=!d.classList.contains('open');closeDD(d);d.classList.toggle('open',open);b.setAttribute('aria-expanded',open)});d.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>closeDD()))});
@@ -298,7 +296,6 @@ $('#clear-measurements').onclick=()=>{measurements=null;save('tailorme-measureme
 // Convert existing numbers when changing units, rather than relabeling them.
 let previousUnit='in';$('#unit').addEventListener('focus',e=>previousUnit=e.target.value);$('#unit').addEventListener('change',e=>{const next=e.target.value;if(next===previousUnit)return;const form=$('#measure-form');fields.forEach(([key])=>{const input=form.elements[key];if(input.value)input.value=(Number(input.value)*(next==='cm'?2.54:1/2.54)).toFixed(1)});previousUnit=next});
 
-// Messages pop-up: profile and past work on the left, conversation on the right.
 function renderChat(){const log=$('#chat-log');log.replaceChildren();[{mine:false,text:'Hello! Tell me a little about what you have in mind. ♡'},...(conversations[activeTailor]||[])].forEach(m=>{const b=document.createElement('div');b.className='bubble'+(m.mine?' mine':'');b.textContent=m.text;log.append(b)});log.scrollTop=log.scrollHeight}
 function addMessage(id,text,mine){if(!Array.isArray(conversations[id]))conversations[id]=[];conversations[id].push({text,mine});save('tailorme-chats',conversations);if(activeTailor===id)renderChat()}
 function openChat(id){const t=tailors[id];if(!t)return;activeTailor=id;
@@ -313,4 +310,5 @@ $('#share-measurements').onclick=()=>{if(!measurements){$('#chat-dialog').close(
 $('#chat-view-profile').onclick=()=>{$('#chat-dialog').close();openProfile(activeTailor)};
 route();
 </script>
-</body></html>
+</body>
+</html>
